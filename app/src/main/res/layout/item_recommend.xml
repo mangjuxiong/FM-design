@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/shape_album_item_bg"
+    android:layout_width="match_parent"
+    android:layout_height="75dp">
+    <com.example.fm_design.views.RoundRectImageView
+        android:id="@+id/album_cover"
+        android:layout_width="68dp"
+        android:layout_height="65dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:scaleType="fitXY"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/album_cover"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:singleLine="true"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:text="《今天的成功学》《今天的成功学》《今天的成功学》《今天的成功学》"
+            android:id="@+id/album_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:textSize="12sp"
+            android:singleLine="true"
+            android:lines="1"
+            android:ellipsize="end"
+            android:id="@+id/album_description_tv"
+            android:text="结合前面学到的知识，整合起来，做一个项目结合前面学到的知识，整合起来，做一个项目"
+            android:layout_width="256dp"
+            android:layout_height="15dp"/>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical">
+                <ImageView
+                    android:layout_width="6dp"
+                    android:layout_height="6dp"
+                    android:src="@mipmap/start_icon"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:layout_width="45dp"
+                    android:layout_height="10dp"
+                    android:id="@+id/album_play_count"
+                    android:text="222万"
+                    android:textSize="8sp"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#ff848484"
+                    android:layout_marginLeft="2dp"
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical">
+                <ImageView
+                    android:src="@mipmap/sound_icon"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="6dp"
+                    android:layout_height="6dp"/>
+                <TextView
+                    android:layout_marginLeft="2dp"
+                    android:layout_width="45dp"
+                    android:layout_height="10dp"
+                    android:text="23集"
+                    android:textSize="8sp"
+                    android:id="@+id/album_content_size"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#ff848484" />
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

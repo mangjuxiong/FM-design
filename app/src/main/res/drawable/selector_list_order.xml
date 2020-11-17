@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!---有状态的-->
+    <item android:drawable="@mipmap/list_impress" android:state_pressed="true"/>
+    <!---没状态的-->
+    <item android:drawable="@mipmap/list_normal"/>
+</selector>
