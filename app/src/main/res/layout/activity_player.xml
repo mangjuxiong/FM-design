@@ -106,14 +106,12 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:src="@drawable/selector_next" />
-<!---
             <ImageView
                 android:id="@+id/player_list"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:src="@mipmap/play_list" />
--->
+                android:src="@drawable/selector_play_list" />
 
         </LinearLayout>
 

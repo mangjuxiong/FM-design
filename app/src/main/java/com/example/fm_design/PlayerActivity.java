@@ -1,11 +1,16 @@
 package com.example.fm_design;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -16,6 +21,7 @@ import com.example.fm_design.adapters.PlayerTrackPagerAdapter;
 import com.example.fm_design.interfaces.IPlayCallback;
 import com.example.fm_design.presenters.PlayerPresenter;
 import com.example.fm_design.utils.LogUtil;
+import com.example.fm_design.views.SobPopWindow;
 import com.ximalaya.ting.android.opensdk.model.track.Track;
 import com.ximalaya.ting.android.opensdk.player.service.XmPlayListControl;
 
@@ -51,7 +57,6 @@ public class PlayerActivity extends AppCompatActivity implements IPlayCallback, 
     private boolean mIsUserSlidePager=false;
     private ImageView mPlayModeSwitchBtn;
 
-
     private XmPlayListControl.PlayMode mCurrentMode= PLAY_MODEL_LIST;
     private static  Map<XmPlayListControl.PlayMode,XmPlayListControl.PlayMode> sPlayModeRule=new HashMap<>();
     //歌曲播放模式
@@ -66,6 +71,12 @@ public class PlayerActivity extends AppCompatActivity implements IPlayCallback, 
         sPlayModeRule.put(PLAY_MODEL_SINGLE_LOOP,PLAY_MODEL_LIST);
     }
 
+    private ImageView mPlayerListBtn;
+    private SobPopWindow mSobPopWindow;
+    private ValueAnimator mEnterBgAnimation;
+    private ValueAnimator mOutBgAnimation;
+    private final  int WINDOW_DURATION=500;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +87,28 @@ public class PlayerActivity extends AppCompatActivity implements IPlayCallback, 
         //在界面初始化数据之后才去获取数据
         mPlayerPresenter.getPlayList();
         initEvent();
+        initBgAnimation();
+    }
+
+    private void initBgAnimation() {
+        mEnterBgAnimation = ValueAnimator.ofFloat(1.0f,0.7f);
+        mEnterBgAnimation.setDuration(WINDOW_DURATION);
+        mEnterBgAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value= (float) animation.getAnimatedValue();
+                updateBgAlpha(value);
+            }
+        });
+        mOutBgAnimation = ValueAnimator.ofFloat(0.7f,1.0f);
+        mOutBgAnimation.setDuration(WINDOW_DURATION);
+        mOutBgAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value= (float) animation.getAnimatedValue();
+                updateBgAlpha(value);
+            }
+        });
     }
 
     @Override
@@ -168,6 +201,30 @@ public class PlayerActivity extends AppCompatActivity implements IPlayCallback, 
                 }
             }
         });
+        mPlayerListBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //展示播放列表
+                mSobPopWindow.showAtLocation(v, Gravity.BOTTOM,0,0);
+                //设置透明度为灰色
+                mEnterBgAnimation.start();
+            }
+        });
+        mSobPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //popupWindows消失时恢复透明度
+                mOutBgAnimation.start();
+            }
+        });
+    }
+
+    //设置当前页面的透明度（1为完全透明，0为完全不透明）
+    public  void updateBgAlpha(float alpha){
+        Window window=getWindow();
+        WindowManager.LayoutParams attributes = window.getAttributes();
+        attributes.alpha=alpha;
+        window.setAttributes(attributes);
     }
 
     /**
@@ -207,6 +264,7 @@ public class PlayerActivity extends AppCompatActivity implements IPlayCallback, 
         mPlayPre = this.findViewById(R.id.play_pre);
         mPlayNext = this.findViewById(R.id.play_next);
         mTrackTitleTv = this.findViewById(R.id.track_title);
+        mPlayerListBtn = findViewById(R.id.player_list);
         if (!TextUtils.isEmpty(mTrackTitleText)) {
             mTrackTitleTv.setText(mTrackTitleText);
         }
@@ -216,6 +274,7 @@ public class PlayerActivity extends AppCompatActivity implements IPlayCallback, 
         //配置适配器
         mTrackPagerView.setAdapter(mTrackPagerAdapter);
         mPlayModeSwitchBtn = this.findViewById(R.id.player_mode_switch_btn);
+        mSobPopWindow = new SobPopWindow();
     }
 
 
@@ -260,6 +319,10 @@ public class PlayerActivity extends AppCompatActivity implements IPlayCallback, 
     public void onListLoaded(List<Track> list) {
         if (mTrackPagerAdapter != null) {
             mTrackPagerAdapter.setData(list);
+        }
+        //给节目列表添加一份新数据
+        if (mSobPopWindow != null) {
+            mSobPopWindow.setListData(list);
         }
     }
 

@@ -19,7 +19,7 @@
         android:layout_height="60dp"
         android:layout_below="@id/iv_large_cover"
         android:layout_marginTop="2dp"
-        android:background="@color/with">
+        android:background="@color/withe">
 
         <TextView
             android:layout_width="75dp"
